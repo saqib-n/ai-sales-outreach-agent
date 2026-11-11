@@ -1,0 +1,5 @@
+name,title,company,email,linkedin_url,notes
+Maria Gonzalez,Head of Operations,Acme Robotics,maria.gonzalez@example.com,https://linkedin.com/in/example-maria,Looking to cut warehouse fulfillment time
+David Chen,VP of Sales,Northwind Traders,david.chen@example.com,https://linkedin.com/in/example-david,"Team growing fast, hiring 5 new reps this quarter"
+Priya Patel,Founder,BrightPath Health,priya.patel@example.com,https://linkedin.com/in/example-priya,Recently raised a seed round
+Tom Walsh,IT Director,Solstice Analytics,tom.walsh@example.com,https://linkedin.com/in/example-tom,Migrating off legacy on-prem systems this year
