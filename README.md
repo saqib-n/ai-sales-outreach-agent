@@ -132,76 +132,21 @@ python process_leads.py --send     # real sending, asks again per lead
 
 <pre>
 ai-sales-outreach-agent/
-  .env.example                                           # copy to .env and add your key
-  case_study.md                                          # longer write-up of the design
-  process_leads.py                                       # runs the batch with the approval prompt
+  .env.example            # copy to .env and add your key
+  case_study.md           # longer write-up of the design
+  process_leads.py        # runs the batch with the approval prompt
   README.md
-  requirements.txt                                       # dependencies
-  .git/
-    COMMIT_EDITMSG
-    config
-    description
-    HEAD
-    hooks/applypatch-msg.sample
-    hooks/commit-msg.sample
-    hooks/fsmonitor-watchman.sample
-    hooks/post-update.sample
-    hooks/pre-applypatch.sample
-    hooks/pre-commit.sample
-    hooks/pre-merge-commit.sample
-    hooks/pre-push.sample
-    hooks/pre-rebase.sample
-    hooks/pre-receive.sample
-    hooks/prepare-commit-msg.sample
-    hooks/push-to-checkout.sample
-    hooks/sendemail-validate.sample
-    hooks/update.sample
-    index
-    info/exclude
-    logs/HEAD
-    logs/refs/heads/main
-    logs/refs/remotes/origin/main
-    objects/00/4d121b442f05c01b64d5aa9403b5d53806f65b
-    objects/0d/19a37d674a332b9dba9f34ec54f3144a81a21f
-    objects/10/58a1802dcc262e94668fa970c4d856afffd41e
-    objects/10/6edddf83ee77cbcfbc56428edc0794d5ad883f
-    objects/36/c3486cf20a1e8c68c381b78e68616a4027cbe1
-    objects/41/2240f488cf2af75f18c4ff42bff4508d700d38
-    objects/4e/4af010b8de015ae0f0e1872e998653fb04d5cc
-    objects/78/998da0758f803a8b7d9b492206632524003f81
-    objects/7a/3a4f0ab20b8170a7b714479283340f5fe09e10
-    objects/8b/d4ae4e401a098e898fe9e025ae17f3bdd82cfa
-    objects/91/741a425461ba419e95f39dc5d88278bfffb12e
-    objects/a2/667477f906e25e4d46862b73a0cf1d10163a78
-    objects/a7/14d955d62209cd096b028913ca9644ae128527
-    objects/b1/de0ebc60c06839298476a3eff78a9757a6bb09
-    objects/b5/ff3a9e767ce808891018a618a688c387555050
-    objects/bb/1d0d20270c6b562a687dd6c5e21f3c4d7ba090
-    objects/c1/d430221fc4883e4d6a72b778dc43d3dd8bea28
-    objects/c2/dd3fcfb07ebee812b422c718bcd3557a398df5
-    objects/c5/4aeb32cf364cf433dfb7c8ce58583bc231b3a2
-    objects/c5/97c23fa30e7a1e2dfac8278bb520f879e325c9
-    objects/c6/beecc22a1dd89f074b060e510f303738bae561
-    objects/cf/1303a63b951fa6ec27a6ba48059cc0dc64f141
-    objects/de/746f20e8d94bc4bca3a762ef31b38beac8dfce
-    objects/e5/6d0464232e3f00c54b6317bcda0a87126ef783
-    objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391
-    objects/ea/2d6533c341e94f0947299ec405fffd79901dc6
-    objects/eb/e9e744f03bcbd6a41b902a82f36202d82c69d6
-    refs/heads/main
-    refs/remotes/origin/main
+  requirements.txt        # dependencies
   agent/
-    email_sender.py                                      # SMTP sending
-    llm.py                                               # picks the model from LLM_MODEL
-    outreach.py                                          # the LangGraph pipeline and prompts
-    research.py                                          # Tavily lookup with the local fallback
+    email_sender.py       # SMTP sending
+    llm.py                # picks the model from LLM_MODEL
+    outreach.py           # the LangGraph pipeline and prompts
+    research.py           # Tavily lookup with the local fallback
   data/
-    company_notes.json                                   # offline research notes for the sample companies
-    leads.csv                                            # four sample leads
-  demo/
-    demo.gif
-    demo.mp4
-  tests/                                                 # pytest suite, runs without any API key
+    company_notes.json    # offline research notes for the sample companies
+    leads.csv             # four sample leads
+  demo/                   # recording of a live run (GIF and MP4)
+  tests/                  # pytest suite, runs without any API key
 </pre>
 
 <h2>Built with</h2>
