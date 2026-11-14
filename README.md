@@ -30,7 +30,7 @@
 
 <p align="center"><img src="demo/demo.gif" alt="Campaign screen: the agent researches each prospect, writes a three-email sequence, and waits for a person to approve it" width="100%"></p>
 
-<p align="center"><sub>Recorded in the built-in campaign screen from a real run on Google Gemini (<code>gemini-3.5-flash</code>) on 14 November 2026. Nothing is scripted. Only the time spent waiting for the model is fast-forwarded, and the real response times are shown on screen. <a href="demo/demo.mp4">Download the MP4</a>.</sub></p>
+<p align="center"><sub>Recorded in the built-in campaign screen from a real run on Google Gemini (<code>gemini-3.5-flash-lite</code>) on 14 November 2026. Nothing is scripted. Only the time spent waiting for the model is fast-forwarded, and the real response times are shown on screen. <a href="demo/demo.mp4">Download the MP4</a>.</sub></p>
 
 <p>Run <code>python app.py</code> and it opens a campaign screen where you watch the agent research each prospect and write the three emails, then approve or skip each one (approval is a dry run). It is the same agent code as the command line version, with a screen on top.</p>
 
