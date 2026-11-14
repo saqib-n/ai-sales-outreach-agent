@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Outreach Agent</title>
+<style>
+  :root {
+    --bg: #f7f6f9; --surface: #fff; --line: #e7e4ec; --line-2: #f1eff4;
+    --text: #1e1b26; --muted: #6c6779; --faint: #a39fb0;
+    --brand: #d6336c; --brand-2: #c2255c; --brand-soft: #fdebf1;
+    --ok: #2b8a3e; --ok-bg: #e6f4ea; --work: #1c7ed6; --work-bg: #e7f1fc; --warn: #b26a00; --warn-bg: #fff4dc; --bad: #c92a2a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--bg); color: var(--text); font: 14px/1.5 "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; overflow: hidden; }
+  button { font: inherit; cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  .topbar { height: 58px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 20px; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 16px; }
+  .logo .mark { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, #f06595, #d6336c); display: grid; place-items: center; }
+  .crumbs { color: var(--muted); font-size: 13.5px; margin-left: 8px; }
+  .crumbs b { color: var(--text); font-weight: 600; }
+  .spacer { flex: 1; }
+  .pill { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; }
+  .pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+  .btn { border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 9px; padding: 8px 14px; font-weight: 550; white-space: nowrap; }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; display: inline-flex; gap: 8px; align-items: center; }
+  .btn.primary:hover { background: var(--brand-2); }
+  .btn:disabled { opacity: .5; cursor: default; }
+
+  .main { flex: 1; min-height: 0; display: grid; grid-template-columns: 300px 1fr; }
+  .leads { border-right: 1px solid var(--line); background: var(--surface); overflow-y: auto; }
+  .leads h3 { margin: 0; padding: 14px 16px 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+  .lead { display: grid; grid-template-columns: 38px 1fr; gap: 2px 10px; padding: 11px 16px; border-left: 3px solid transparent; cursor: pointer; }
+  .lead:hover { background: #faf9fb; }
+  .lead.on { background: var(--brand-soft); border-left-color: var(--brand); }
+  .lead .av { grid-row: span 3; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 650; font-size: 13.5px; }
+  .lead b { font-size: 14px; }
+  .lead .t { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .status { justify-self: start; font-size: 11px; font-weight: 650; border-radius: 6px; padding: 0 7px; margin-top: 3px; display: inline-flex; gap: 5px; align-items: center; }
+  .status.new { color: var(--faint); background: #f3f1f6; }
+  .status.work { color: var(--work); background: var(--work-bg); }
+  .status.review { color: var(--warn); background: var(--warn-bg); }
+  .status.approved { color: var(--ok); background: var(--ok-bg); }
+  .status.skipped { color: var(--muted); background: #f3f1f6; }
+  .status.error { color: var(--bad); background: #fdecea; }
+  .spin { width: 10px; height: 10px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: rot .7s linear infinite; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+
+  .detail { display: flex; flex-direction: column; min-height: 0; }
+  .scroll { flex: 1; overflow-y: auto; padding: 20px 28px 24px; }
+  .who { display: flex; gap: 14px; align-items: center; }
+  .who .av { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 650; font-size: 17px; }
+  .who h1 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .who .t { color: var(--muted); font-size: 13px; }
+  .note { margin-top: 10px; display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: #5f3a48; background: var(--brand-soft); border-radius: 8px; padding: 4px 10px; }
+  .steps { display: flex; align-items: center; gap: 8px; margin: 18px 0 14px; flex-wrap: wrap; }
+  .st { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--faint); font-weight: 600; }
+  .st .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d9d5e0; display: grid; place-items: center; font-size: 11px; background: var(--surface); }
+  .st.work { color: var(--work); } .st.work .dot { border-color: var(--work); }
+  .st.done { color: var(--text); } .st.done .dot { border-color: var(--ok); background: var(--ok); color: #fff; }
+  .st-line { width: 34px; height: 2px; background: #e3dfe9; }
+  .st-line.done { background: var(--ok); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; margin-bottom: 12px; overflow: hidden; animation: in .35s ease; }
+  @keyframes in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .card-head { display: flex; gap: 10px; align-items: center; padding: 9px 14px; border-bottom: 1px solid var(--line-2); font-size: 12.5px; color: var(--muted); }
+  .card-head b { color: var(--text); font-size: 13px; }
+  .card-head .day { font-weight: 700; color: var(--brand); background: var(--brand-soft); border-radius: 6px; padding: 0 7px; font-size: 11.5px; }
+  .card-body { padding: 11px 14px 13px; }
+  .research { font-size: 13px; color: #4b4657; }
+  .subj { font-weight: 650; margin-bottom: 6px; outline: none; border-radius: 6px; }
+  .body { white-space: pre-wrap; font-size: 13.5px; outline: none; border-radius: 6px; }
+  [contenteditable="true"]:hover { background: #faf8fc; }
+  [contenteditable="true"]:focus { background: #fff8fb; box-shadow: 0 0 0 2px var(--brand-soft); }
+  .ghostcard { border: 1.5px dashed #ddd8e4; border-radius: 13px; padding: 14px; margin-bottom: 12px; color: var(--faint); font-size: 13px; display: flex; gap: 10px; align-items: center; }
+  .ghostcard.work { color: var(--work); border-color: #b9d6f5; background: #f7fbff; }
+  .ghostcard .spin { width: 13px; height: 13px; }
+  .placeholder { margin: 60px auto; max-width: 440px; text-align: center; color: var(--muted); }
+  .placeholder h2 { color: var(--text); font-size: 19px; margin: 12px 0 6px; }
+  .err { color: var(--bad); background: #fdecea; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
+
+  .approve { flex: none; border-top: 1px solid var(--line); background: var(--surface); padding: 12px 28px; display: flex; align-items: center; gap: 12px; }
+  .approve .msg { color: var(--muted); font-size: 13px; flex: 1; min-width: 0; }
+  .approve .msg b { color: var(--text); }
+  .approve .msg.sent { color: var(--ok); font-family: "Cascadia Code", Consolas, Menlo, monospace; font-size: 12.5px; }
+
+  @media (max-width: 900px) {
+    body { overflow: auto; }
+    .main { grid-template-columns: 1fr; }
+    .leads { border-right: 0; border-bottom: 1px solid var(--line); max-height: 300px; }
+    .scroll { padding: 16px; }
+    .approve { padding: 12px 16px; flex-wrap: wrap; }
+    .crumbs, .pill.src { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo"><div class="mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></div>Sequences</div>
+  <div class="crumbs">Campaigns / <b>Q4 outbound</b></div>
+  <span class="spacer"></span>
+  <span class="pill src" id="research-src">research</span>
+  <span class="pill"><i></i><span id="model">model</span></span>
+  <button class="btn primary" id="run" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Write all sequences</button>
+</header>
+
+<div class="main">
+  <aside class="leads"><h3>Prospects</h3><div id="leads"></div></aside>
+  <section class="detail">
+    <div class="scroll" id="scroll"></div>
+    <div class="approve" id="approve" hidden>
+      <div class="msg" id="approve-msg"></div>
+      <button class="btn" id="skip" type="button">Skip</button>
+      <button class="btn primary" id="ok" type="button">Approve first email</button>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const COLORS = ["#d6336c", "#1971c2", "#0c8599", "#7048e8", "#2b8a3e", "#e8590c"];
+  const STEP_ORDER = ["research", "draft_initial", "draft_followups"];
+  const STATUS = { new: "Not started", work: "Writing", review: "Needs your review", approved: "Approved", skipped: "Skipped", error: "Failed" };
+  let leads = [], sel = null, running = false;
+
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function color(s) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return COLORS[h % COLORS.length]; }
+  function initials(n) { return n.split(/\s+/).map((p) => p[0] || "").join("").slice(0, 2).toUpperCase(); }
+  function av(l, cls) { const a = el("div", "av" + (cls ? " " + cls : ""), initials(l.name)); a.style.background = color(l.name); return a; }
+
+  function renderList() {
+    const box = $("leads"); box.innerHTML = "";
+    leads.forEach((l) => {
+      const r = el("div", "lead" + (l === sel ? " on" : ""));
+      const st = el("span", "status " + l.state);
+      if (l.state === "work") st.appendChild(el("span", "spin"));
+      st.append(STATUS[l.state]);
+      r.append(av(l), el("b", null, l.name), el("div", "t", l.title + " · " + l.company), st);
+      r.addEventListener("click", () => { sel = l; renderList(); renderDetail(); });
+      box.appendChild(r);
+    });
+  }
+
+  function stepState(l, step) {
+    if (l.done.includes(step)) return "done";
+    if (l.state === "work" && STEP_ORDER[l.done.length] === step) return "work";
+    return "";
+  }
+
+  function emailCard(day, label, email, editable) {
+    const c = el("div", "card");
+    const h = el("div", "card-head"); h.append(el("span", "day", day), el("b", null, label));
+    if (editable) h.append(el("span", null, "· click the text to edit before approving"));
+    c.appendChild(h);
+    const b = el("div", "card-body");
+    const s = el("div", "subj", email.subject); const bd = el("div", "body", email.body);
+    if (editable) { s.contentEditable = "true"; bd.contentEditable = "true"; s.dataset.k = "subject"; bd.dataset.k = "body"; }
+    b.append(s, bd); c.appendChild(b);
+    return c;
+  }
+
+  function ghost(text, working) {
+    const g = el("div", "ghostcard" + (working ? " work" : ""));
+    if (working) g.appendChild(el("span", "spin"));
+    g.append(text); return g;
+  }
+
+  function renderDetail() {
+    const box = $("scroll"); box.innerHTML = "";
+    const l = sel;
+    if (!l) { $("approve").hidden = true; return; }
+    const who = el("div", "who"); const t = el("div"); t.append(el("h1", null, l.name), el("div", "t", l.title + " at " + l.company + " · " + l.email));
+    who.append(av(l), t); box.appendChild(who);
+    if (l.notes && l.notes !== "none") { const n = el("div", "note"); n.append("Lead note: " + l.notes); box.appendChild(n); }
+
+    const steps = el("div", "steps");
+    [["research", "Research"], ["draft_initial", "First email"], ["draft_followups", "Follow-ups"]].forEach(([k, label], i) => {
+      if (i) steps.appendChild(el("div", "st-line" + (l.done.includes(k) ? " done" : "")));
+      const s = el("div", "st " + stepState(l, k)); const d = el("span", "dot", l.done.includes(k) ? "✓" : String(i + 1));
+      s.append(d, label); steps.appendChild(s);
+    });
+    box.appendChild(steps);
+
+    if (l.error) box.appendChild(el("div", "err", l.error));
+
+    if (l.research) { const c = el("div", "card"); const h = el("div", "card-head"); h.append(el("b", null, "Company research"), el("span", null, "· what the emails are based on")); c.append(h); const b = el("div", "card-body research", l.research); c.appendChild(b); box.appendChild(c); }
+    else if (l.state === "work") box.appendChild(ghost("Researching " + l.company + "...", true));
+
+    if (l.initial) box.appendChild(emailCard("Day 0", "First email", l.initial, l.state === "review"));
+    else if (l.research && l.state === "work") box.appendChild(ghost("Writing a first email that uses the research...", true));
+
+    if (l.followups) l.followups.forEach((f, i) => box.appendChild(emailCard(i ? "Day 7" : "Day 3", "Follow-up " + (i + 1), f, false)));
+    else if (l.initial && l.state === "work") box.appendChild(ghost("Writing the day 3 and day 7 follow-ups...", true));
+
+    if (l.state === "new") {
+      const p = el("div", "placeholder");
+      p.innerHTML = '<svg width="44" height="44" viewBox="0 0 24 24" fill="#d8d3e0"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>';
+      p.append(el("h2", null, "No sequence yet"), el("div", null, "Press “Write all sequences”. The agent researches the company, writes a first email, then two shorter follow-ups. Nothing is sent until you approve it."));
+      box.appendChild(p);
+    }
+
+    const bar = $("approve"), msg = $("approve-msg");
+    bar.hidden = !(l.state === "review" || l.state === "approved" || l.state === "skipped");
+    $("ok").hidden = $("skip").hidden = l.state !== "review";
+    msg.className = "msg";
+    if (l.state === "review") { msg.innerHTML = ""; msg.append(el("b", null, "Your call. "), "Approving does a dry run only, nothing is emailed from this screen." + (l.seconds ? " Written in " + l.seconds + "s." : "")); }
+    else if (l.state === "approved") { msg.className = "msg sent"; msg.textContent = l.sendStatus; }
+    else if (l.state === "skipped") msg.textContent = "Skipped. This prospect gets no email.";
+  }
+
+  async function writeSequence(l) {
+    l.state = "work"; l.done = []; l.error = null; sel = l; renderList(); renderDetail();
+    try {
+      const res = await fetch("/api/sequence", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: l.name, title: l.title, company: l.company, email: l.email, notes: l.notes || "none" }) });
+      if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error((d.detail && JSON.stringify(d.detail)) || "Request failed (" + res.status + ")"); }
+      const reader = res.body.getReader(); const dec = new TextDecoder(); let buf = "";
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        let i;
+        while ((i = buf.indexOf("\n")) >= 0) {
+          const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+          if (!line) continue;
+          const msg = JSON.parse(line);
+          if (msg.error) throw new Error(msg.error);
+          if (msg.done) { l.seconds = msg.seconds; continue; }
+          if (msg.step === "research") l.research = msg.research;
+          if (msg.step === "draft_initial") l.initial = msg.initial_email;
+          if (msg.step === "draft_followups") l.followups = msg.followups;
+          l.done.push(msg.step);
+          if (sel === l) renderDetail();
+          renderList();
+        }
+      }
+      l.state = "review";
+    } catch (err) { l.state = "error"; l.error = err.message; }
+    renderList(); if (sel === l) renderDetail();
+  }
+
+  async function runAll() {
+    if (running) return;
+    const todo = leads.filter((l) => l.state === "new" || l.state === "error");
+    if (!todo.length) return;
+    running = true; $("run").disabled = true;
+    for (const l of todo) { await writeSequence(l); await new Promise((r) => setTimeout(r, 1200)); }
+    running = false; $("run").disabled = false;
+    document.body.dataset.finished = "1";
+  }
+
+  $("run").addEventListener("click", runAll);
+  $("skip").addEventListener("click", () => { if (!sel) return; sel.state = "skipped"; renderList(); renderDetail(); });
+  $("ok").addEventListener("click", async () => {
+    const l = sel; if (!l || l.state !== "review") return;
+    const subject = document.querySelector('[data-k="subject"]').textContent.trim();
+    const body = document.querySelector('[data-k="body"]').innerText.trim();
+    l.initial = { subject, body };
+    $("ok").disabled = true;
+    try {
+      const d = await (await fetch("/api/approve", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ to: l.email, subject, body }) })).json();
+      l.state = "approved"; l.sendStatus = d.status;
+    } catch (err) { l.error = "Approval failed: " + err.message; }
+    $("ok").disabled = false;
+    renderList(); renderDetail();
+  });
+
+  fetch("/api/info").then((r) => r.json()).then((d) => { $("model").textContent = d.model; $("research-src").textContent = "Research: " + d.research; }).catch(() => {});
+  fetch("/api/leads").then((r) => r.json()).then((list) => { leads = list.map((l) => ({ ...l, state: "new", done: [] })); sel = leads[0]; renderList(); renderDetail(); }).catch(() => {});
+})();
+</script>
+</body>
+</html>

@@ -28,9 +28,11 @@
 
 <h2>See it in action</h2>
 
-<p align="center"><img src="demo/demo.gif" alt="Terminal recording of AI Sales Outreach Agent running on Google Gemini" width="100%"></p>
+<p align="center"><img src="demo/demo.gif" alt="Campaign screen: the agent researches each prospect, writes a three-email sequence, and waits for a person to approve it" width="100%"></p>
 
-<p align="center"><sub>Recorded from a real run on Google Gemini (<code>gemini-3.5-flash-lite</code>) on 12 November 2026. Nothing is edited or scripted. Only the waiting time while the model thinks is shortened. <a href="demo/demo.mp4">Download the MP4</a>.</sub></p>
+<p align="center"><sub>Recorded in the built-in campaign screen from a real run on Google Gemini (<code>gemini-3.5-flash</code>) on 14 November 2026. Nothing is scripted. Only the time spent waiting for the model is fast-forwarded, and the real response times are shown on screen. <a href="demo/demo.mp4">Download the MP4</a>.</sub></p>
+
+<p>Run <code>python app.py</code> and it opens a campaign screen where you watch the agent research each prospect and write the three emails, then approve or skip each one (approval is a dry run). It is the same agent code as the command line version, with a screen on top.</p>
 
 <h2>The problem</h2>
 
@@ -109,6 +111,7 @@ Approve this outreach? [y]es / [s]kip:
 pip install -r requirements.txt
 cp .env.example .env        # on Windows: copy .env.example .env
 # open .env and paste your API key
+python app.py               # opens the campaign screen at http://localhost:8000
 python process_leads.py            # dry run, nothing is sent
 python process_leads.py --send     # real sending, asks again per lead
 </pre>
@@ -135,6 +138,7 @@ ai-sales-outreach-agent/
   .env.example            # copy to .env and add your key
   case_study.md           # longer write-up of the design
   process_leads.py        # runs the batch with the approval prompt
+  app.py                # browser campaign screen, the same agent with a UI
   README.md
   requirements.txt        # dependencies
   agent/
@@ -145,8 +149,10 @@ ai-sales-outreach-agent/
   data/
     company_notes.json    # offline research notes for the sample companies
     leads.csv             # four sample leads
-  demo/                   # recording of a live run (GIF and MP4)
+  demo/                   # recording of a live run (GIF, MP4 and a screenshot)
   tests/                  # pytest suite, runs without any API key
+  web/
+    index.html          # the campaign screen, one file, no build step
 </pre>
 
 <h2>Built with</h2>
@@ -160,7 +166,7 @@ pip install -r requirements-dev.txt
 pytest
 </pre>
 
-<p>Five tests cover the research fallback, the dry-run default, missing mail settings, the email signature and the CSV export. None of the tests call a model or need an API key, so they run on GitHub Actions on every push. The badge at the top shows the latest result.</p>
+<p>Six tests cover the research fallback, the dry-run default, missing mail settings, the email signature and the CSV export, plus the browser screen and its API. None of the tests call a model or need an API key, so they run on GitHub Actions on every push. The badge at the top shows the latest result.</p>
 
 <h2>Roadmap</h2>
 
